@@ -12,9 +12,9 @@ let conn = null;
 const initMySQL = async () => {
   conn = await mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'tutorials',
+    user: 'admin',
+    password: '1234',
+    database: 'test',
     port: 3306
   });
 };
@@ -90,8 +90,18 @@ router.post('/login', async (req, res, next) => {
     console.error('Error logging in:', error.message);
     res.status(500).json({ message: 'Something went wrong' });
   }
-})
+});
 
+router.post('/authen', (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    var decoded = jwt.verify(token, secret);
+    res.json({ stauts: "ok", decoded })
+  } catch (error) {
+    res.json({ status: "error", message: error.message })
+  }
+
+})
 
 
 // PUT update user
